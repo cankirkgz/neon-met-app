@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_colors.dart';
 import 'package:neon_met_app/routes/app_router.dart';
 import 'package:neon_met_app/viewmodel/favorite_viewmodel.dart';
 import 'package:neon_met_app/widgets/atoms/primary_button.dart';
@@ -34,7 +35,7 @@ class WelcomeBanner extends StatelessWidget {
                     "Welcome to The Met",
                     style: TextStyle(
                       fontSize: 35,
-                      color: Colors.white,
+                      color: AppColors.textDark,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -58,10 +59,10 @@ class WelcomeBanner extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Text(
+                    child: Text(
                       "Go to Favorites",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColors.textDark,
                         fontSize: 16,
                         decoration: TextDecoration.underline,
                       ),

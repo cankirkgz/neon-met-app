@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_colors.dart';
 import 'package:neon_met_app/core/constants/app_durations.dart';
 import 'package:neon_met_app/routes/app_router.dart';
 import 'package:neon_met_app/widgets/organism/splash_animation.dart';
@@ -11,7 +12,6 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // yönlendirmeyi build sonrası çalıştır:
     Future.microtask(() async {
       await Future.delayed(AppDurations.splashDelay);
       if (context.mounted) {
@@ -20,7 +20,7 @@ class SplashScreen extends StatelessWidget {
     });
 
     return const Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.scaffoldLight,
       body: Center(
         child: SplashAnimation(),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_colors.dart';
 
 class SectionTitle extends StatelessWidget {
   final String title;
@@ -24,7 +25,7 @@ class SectionTitle extends StatelessWidget {
             children: [
               const Text(
                 "See all",
-                style: TextStyle(color: Colors.grey, fontSize: 16),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
               ),
               Image.asset(
                 'assets/icons/img_forward.png',

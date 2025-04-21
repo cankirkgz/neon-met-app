@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_colors.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
@@ -14,7 +15,7 @@ class PrimaryButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(Colors.red),
+        backgroundColor: WidgetStateProperty.all(AppColors.error),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
@@ -26,7 +27,8 @@ class PrimaryButton extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: const TextStyle(color: Colors.white, fontSize: 18.0),
+        style: TextStyle(
+            color: Theme.of(context).scaffoldBackgroundColor, fontSize: 18.0),
       ),
     );
   }

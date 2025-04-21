@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_colors.dart';
 import 'package:neon_met_app/data/models/location_info.dart';
 
 class LocationCard extends StatelessWidget {
@@ -11,13 +12,12 @@ class LocationCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ---------- Görsel ----------
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.asset(

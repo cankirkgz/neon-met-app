@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_colors.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerCardPlaceholder extends StatelessWidget {
@@ -14,13 +15,13 @@ class ShimmerCardPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
+      baseColor: AppColors.textSecondary[300]!,
+      highlightColor: AppColors.textSecondary[100]!,
       child: Container(
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: Colors.grey[300],
+          color: AppColors.textSecondary[300],
           borderRadius: BorderRadius.circular(8),
         ),
       ),

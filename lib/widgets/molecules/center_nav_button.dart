@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_colors.dart';
 
 class CenterNavButton extends StatelessWidget {
   final bool isSelected;
@@ -18,11 +19,13 @@ class CenterNavButton extends StatelessWidget {
         width: 80,
         height: 80,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.grey[900]
+              : AppColors.scaffoldLight,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(.15),
+              color: AppColors.scaffoldDark.withOpacity(.15),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),

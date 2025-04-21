@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_colors.dart';
 
 class BottomNavItem extends StatelessWidget {
   final String icon;
@@ -23,7 +24,7 @@ class BottomNavItem extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-            color: isSelected ? Colors.red : Colors.grey,
+            color: isSelected ? AppColors.error : AppColors.textSecondary,
             fontWeight: FontWeight.bold,
           ),
         )

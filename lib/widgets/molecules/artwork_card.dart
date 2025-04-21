@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_colors.dart';
 
 class ArtworkCard extends StatelessWidget {
   final String image;
@@ -68,7 +69,7 @@ class ArtworkCard extends StatelessWidget {
           child: Container(
             width: cardWidth,
             decoration: BoxDecoration(
-              color: Colors.grey[100],
+              color: AppColors.textSecondary[100],
               borderRadius: BorderRadius.circular(8),
             ),
             child: Column(
@@ -136,7 +137,7 @@ class ArtworkCard extends StatelessWidget {
                                   isFavorite
                                       ? Icons.favorite
                                       : Icons.favorite_border,
-                                  color: Colors.white,
+                                  color: AppColors.scaffoldLight,
                                   size: 16,
                                 ),
                                 const SizedBox(width: 4),
@@ -145,7 +146,7 @@ class ArtworkCard extends StatelessWidget {
                                       ? 'Added to favorites'
                                       : 'Add to favorites',
                                   style: const TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.scaffoldLight,
                                     fontSize: 12,
                                   ),
                                 ),
@@ -175,7 +176,7 @@ class ArtworkCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: subtitleFontSize,
-                              color: Colors.grey,
+                              color: AppColors.textSecondary,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -187,7 +188,7 @@ class ArtworkCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: titleFontSize,
-                              color: Colors.black,
+                              color: AppColors.scaffoldDark,
                               fontWeight: FontWeight.w500,
                             ),
                           ),

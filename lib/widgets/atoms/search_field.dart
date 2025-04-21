@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_colors.dart';
 
 class SearchField extends StatefulWidget {
   final ValueChanged<String>? onSubmitted;
@@ -43,11 +44,12 @@ class _SearchFieldState extends State<SearchField> {
     return ValueListenableBuilder<bool>(
       valueListenable: _isFocused,
       builder: (context, isFocused, _) {
-        final borderColor = isFocused ? Colors.black : Colors.grey[400]!;
+        final borderColor =
+            isFocused ? AppColors.scaffoldDark : AppColors.textSecondary[400]!;
 
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.scaffoldLight,
             borderRadius: BorderRadius.circular(6),
             border: Border.all(color: borderColor, width: 2),
           ),
@@ -62,8 +64,8 @@ class _SearchFieldState extends State<SearchField> {
                     controller: widget.controller,
                     decoration: InputDecoration(
                       hintText: widget.hintText,
-                      hintStyle:
-                          TextStyle(color: Colors.grey[600], fontSize: 18),
+                      hintStyle: TextStyle(
+                          color: AppColors.textSecondary[600], fontSize: 18),
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 20,
                         vertical: 12,
@@ -78,7 +80,9 @@ class _SearchFieldState extends State<SearchField> {
                 // Dikey çizgi
                 Container(
                   width: 2,
-                  color: isFocused ? Colors.black : Colors.grey[300],
+                  color: isFocused
+                      ? AppColors.scaffoldDark
+                      : AppColors.textSecondary[300],
                 ),
                 // Arama ikonu
                 Image.asset(

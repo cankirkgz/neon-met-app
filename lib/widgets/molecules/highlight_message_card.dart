@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_colors.dart';
 
 class HighlightMessageCard extends StatelessWidget {
   final String imageName;
@@ -26,7 +27,7 @@ class HighlightMessageCard extends StatelessWidget {
           child: Text(
             text,
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.scaffoldLight,
               fontSize: 35,
               fontWeight: FontWeight.bold,
             ),

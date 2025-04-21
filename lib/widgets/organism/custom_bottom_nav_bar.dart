@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_colors.dart';
 import 'package:neon_met_app/widgets/molecules/bottom_nav_item.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
@@ -27,12 +28,12 @@ class CustomBottomNavBar extends StatelessWidget {
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(.2),
+                color: AppColors.scaffoldDark.withOpacity(.2),
                 blurRadius: 15,
                 offset: const Offset(0, 2),
               ),
               BoxShadow(
-                color: Colors.black.withOpacity(.15),
+                color: AppColors.scaffoldDark.withOpacity(.15),
                 blurRadius: 6,
               ),
             ],
@@ -41,7 +42,9 @@ class CustomBottomNavBar extends StatelessWidget {
             shape: const CircularNotchedRectangle(),
             notchMargin: 8,
             elevation: 0,
-            color: Colors.white,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.grey[900]
+                : AppColors.scaffoldLight,
             child: SizedBox(
               height: 60,
               child: Row(
