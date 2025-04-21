@@ -1,12 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:neon_met_app/routes/app_router.dart';
+import 'package:neon_met_app/data/models/favorite_artwork.dart';
+import 'package:neon_met_app/viewmodel/favorite_viewmodel.dart';
 import 'package:neon_met_app/viewmodel/object_viewmodel.dart';
 import 'package:neon_met_app/widgets/atoms/section_title.dart';
 import 'package:neon_met_app/widgets/molecules/artwork_card.dart';
 import 'package:neon_met_app/widgets/molecules/welcome_banner.dart';
 import 'package:neon_met_app/widgets/organism/artwork_horizontal_list.dart';
 import 'package:provider/provider.dart';
+import 'package:neon_met_app/routes/app_router.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -15,52 +17,74 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<ObjectViewModel>();
+    final favVm = context.watch<FavoriteViewModel>();
 
+    // İlk yüklemeyi tetikle
     if (!vm.isLoading &&
         vm.currentExhibitions.isEmpty &&
-        vm.famousArtworks.isEmpty) {
+        vm.famousArtworks.isEmpty &&
+        vm.errorMessage == null) {
       Future.microtask(() {
-        final notifier = context.read<ObjectViewModel>();
-        notifier.fetchCurrentExhibitions();
-        notifier.fetchFamousArtworks();
+        vm.fetchCurrentExhibitions();
+        vm.fetchFamousArtworks();
       });
     }
 
-    final double cardWidth = MediaQuery.of(context).size.width * 0.4;
+    final cardWidth = MediaQuery.of(context).size.width * 0.4;
 
-    final currentCards = vm.currentExhibitions.map(
-      (obj) => ArtworkCard(
+    final currentCards = vm.currentExhibitions.map((obj) {
+      final isFav = favVm.isFavorite(obj.objectID);
+      return ArtworkCard(
         image: obj.primaryImageSmall ?? '',
         title: obj.title,
         subTitle: obj.artistDisplayName?.isNotEmpty == true
             ? obj.artistDisplayName
             : (obj.culture ?? 'Unknown'),
         width: cardWidth,
+        showFavoriteButton: true,
+        isFavorite: isFav,
+        onFavoritePressed: () {
+          final fav = FavoriteArtwork(
+            objectId: obj.objectID,
+            title: obj.title,
+            image: obj.primaryImageSmall,
+            artist: obj.artistDisplayName ?? obj.culture,
+            department: obj.department,
+          );
+          favVm.toggleFavorite(fav);
+        },
         onPressed: () {
           context.router.push(ArtworkDetailRoute(objectId: obj.objectID));
         },
-      ),
-    );
+      );
+    }).toList();
 
-    final famousCards = vm.famousArtworks.map(
-      (obj) => ArtworkCard(
+    final famousCards = vm.famousArtworks.map((obj) {
+      final isFav = favVm.isFavorite(obj.objectID);
+      return ArtworkCard(
         image: obj.primaryImageSmall ?? '',
         title: obj.title,
         subTitle: obj.artistDisplayName?.isNotEmpty == true
             ? obj.artistDisplayName
             : (obj.culture ?? 'Unknown'),
         width: cardWidth,
+        showFavoriteButton: true,
+        isFavorite: isFav,
+        onFavoritePressed: () {
+          final fav = FavoriteArtwork(
+            objectId: obj.objectID,
+            title: obj.title,
+            image: obj.primaryImageSmall,
+            artist: obj.artistDisplayName ?? obj.culture,
+            department: obj.department,
+          );
+          favVm.toggleFavorite(fav);
+        },
         onPressed: () {
           context.router.push(ArtworkDetailRoute(objectId: obj.objectID));
         },
-      ),
-    );
-
-    if (vm.isLoading &&
-        vm.currentExhibitions.isEmpty &&
-        vm.famousArtworks.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
-    }
+      );
+    }).toList();
 
     return SingleChildScrollView(
       child: Column(
@@ -77,9 +101,14 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 24),
           const WelcomeBanner(),
           const SizedBox(height: 32),
-          _Section(
+
+          // Current Exhibitions Bölümü
+          _LoadingOrContentSection(
             title: "Current Exhibitions",
-            cards: currentCards.toList(),
+            isLoading: vm.isLoading,
+            hasError: vm.errorMessage != null,
+            errorMessage: vm.errorMessage,
+            items: currentCards,
             onSeeAllPressed: () {
               context.router.push(
                 ArtworkListRoute(
@@ -90,9 +119,14 @@ class HomeScreen extends StatelessWidget {
             },
           ),
           const SizedBox(height: 24),
-          _Section(
+
+          // Famous Artworks Bölümü
+          _LoadingOrContentSection(
             title: "Famous Artworks",
-            cards: famousCards.toList(),
+            isLoading: vm.isLoading,
+            hasError: vm.errorMessage != null,
+            errorMessage: vm.errorMessage,
+            items: famousCards,
             onSeeAllPressed: () {
               context.router.push(
                 ArtworkListRoute(
@@ -102,6 +136,7 @@ class HomeScreen extends StatelessWidget {
               );
             },
           ),
+
           const SizedBox(height: 64),
         ],
       ),
@@ -109,15 +144,21 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _Section extends StatelessWidget {
-  const _Section({
+class _LoadingOrContentSection extends StatelessWidget {
+  const _LoadingOrContentSection({
     required this.title,
-    required this.cards,
+    required this.isLoading,
+    required this.hasError,
+    required this.errorMessage,
+    required this.items,
     required this.onSeeAllPressed,
   });
 
   final String title;
-  final List<ArtworkCard> cards;
+  final bool isLoading;
+  final bool hasError;
+  final String? errorMessage;
+  final List<ArtworkCard> items;
   final VoidCallback onSeeAllPressed;
 
   @override
@@ -126,12 +167,29 @@ class _Section extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          SectionTitle(
-            title: title,
-            onPressed: onSeeAllPressed,
-          ),
+          SectionTitle(title: title, onPressed: onSeeAllPressed),
           const SizedBox(height: 10),
-          ArtworkHorizontalList(cards: cards),
+
+          // Hata varsa
+          if (hasError)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32),
+              child: Center(
+                child: Text(
+                  errorMessage ?? "Failed to load $title",
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+            )
+          // Yükleniyorsa ve henüz hiç veri yoksa
+          else if (isLoading && items.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 32),
+              child: Center(child: CircularProgressIndicator()),
+            )
+          // Veri geldiyse
+          else
+            ArtworkHorizontalList(cards: items),
         ],
       ),
     );

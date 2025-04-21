@@ -1,60 +1,48 @@
-import 'package:flutter/material.dart';
+// lib/viewmodel/search_collections_viewmodel.dart
+
+import 'package:flutter/foundation.dart';
 import 'package:neon_met_app/data/models/object_model.dart';
 import 'package:neon_met_app/data/services/met_api_service.dart';
 
 class SearchCollectionsViewModel extends ChangeNotifier {
-  final MetApiService _apiService = MetApiService();
+  final _api = MetApiService();
 
-  // Full fetched list
-  List<ObjectModel> _allObjects = [];
-  // Active filtered list
-  List<ObjectModel> _filteredObjects = [];
+  List<ObjectModel> allObjects = [];
+  List<ObjectModel> filteredObjects = [];
+  bool isLoading = false;
+  String? error;
 
-  bool _isLoading = false;
-  String? _error;
+  int? _loadedDepartmentId; // ← ekledik
+  int? get loadedDepartmentId => _loadedDepartmentId; // dışarı açtık
 
-  /// Expose both lists
-  List<ObjectModel> get allObjects => _allObjects;
-  List<ObjectModel> get filteredObjects => _filteredObjects;
-  bool get isLoading => _isLoading;
-  String? get error => _error;
-
-  /// Fetch initial objects (one-time API call)
   Future<void> fetchObjects(int departmentId) async {
-    _isLoading = true;
-    _error = null;
+    // eğer aynı departman Id zaten yüklüyse tekrar yükleme
+    if (_loadedDepartmentId == departmentId) return;
+
+    _loadedDepartmentId = departmentId; // hangi departmanı çektiğimizi sakla
+    isLoading = true;
+    error = null;
     notifyListeners();
 
     try {
-      final ids = await _apiService.fetchObjectIDsByDepartment(departmentId);
-      final firstIds = ids.take(20);
-
-      // Fetch all details in parallel
-      _allObjects = await Future.wait(
-        firstIds.map((id) => _apiService.fetchObjectById(id)),
-      );
-
-      // Initialize filtered list
-      _filteredObjects = List.from(_allObjects);
+      final ids = await _api.fetchObjectIDsByDepartment(departmentId);
+      final objects = await Future.wait(ids
+          .take(50) // isterseniz sınır koyabilirsiniz
+          .map((id) => _api.fetchObjectById(id)));
+      allObjects = objects;
+      filteredObjects = allObjects;
     } catch (e) {
-      _error = e.toString();
-    } finally {
-      _isLoading = false;
-      notifyListeners();
+      error = e.toString();
     }
+
+    isLoading = false;
+    notifyListeners();
   }
 
-  /// In-memory filtering without additional API calls
   void filterObjects(String query) {
-    final lower = query.trim().toLowerCase();
-    if (lower.isEmpty) {
-      // Restore full list
-      _filteredObjects = List.from(_allObjects);
-    } else {
-      _filteredObjects = _allObjects
-          .where((obj) => obj.title.toLowerCase().contains(lower))
-          .toList();
-    }
+    filteredObjects = allObjects
+        .where((o) => o.title.toLowerCase().contains(query.toLowerCase()))
+        .toList();
     notifyListeners();
   }
 }

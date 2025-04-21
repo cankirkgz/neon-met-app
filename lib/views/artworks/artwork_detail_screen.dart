@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:neon_met_app/data/models/object_model.dart';
+import 'package:neon_met_app/data/models/favorite_artwork.dart';
 import 'package:neon_met_app/data/services/met_api_service.dart';
+import 'package:neon_met_app/viewmodel/favorite_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 @RoutePage()
 class ArtworkDetailScreen extends StatelessWidget {
@@ -33,6 +36,9 @@ class ArtworkDetailScreen extends StatelessWidget {
         }
 
         final obj = snapshot.data!;
+        // listen to favorites so icon updates immediately
+        final favVm = context.watch<FavoriteViewModel>();
+        final isFav = favVm.isFavorite(objectId);
 
         return Scaffold(
           appBar: AppBar(
@@ -42,6 +48,24 @@ class ArtworkDetailScreen extends StatelessWidget {
               style: const TextStyle(fontWeight: FontWeight.w500),
             ),
             centerTitle: true,
+            actions: [
+              IconButton(
+                icon: Icon(
+                  isFav ? Icons.favorite : Icons.favorite_border,
+                  color: isFav ? Colors.red : Colors.grey[700],
+                ),
+                onPressed: () {
+                  final fav = FavoriteArtwork(
+                    objectId: obj.objectID,
+                    title: obj.title,
+                    image: obj.primaryImageSmall,
+                    artist: obj.artistDisplayName ?? obj.culture,
+                    department: obj.department,
+                  );
+                  favVm.toggleFavorite(fav);
+                },
+              ),
+            ],
           ),
           body: SingleChildScrollView(
             child: Column(
