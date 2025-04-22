@@ -52,7 +52,7 @@ class DepartmentViewModel extends ChangeNotifier {
           ? object.primaryImageSmall
           : null;
     } catch (e) {
-      debugPrint("Departman görseli alınamadı: $e");
+      debugPrint("Department image not retrieved: $e");
       return null;
     }
   }

@@ -14,8 +14,8 @@ class ArtworkCard extends StatelessWidget {
   final bool isFavorite;
   final VoidCallback? onFavoritePressed;
 
+  // Sabit image yüksekliği
   static const double _imageHeight = 250;
-  static const double _textBlockHeight = 80;
 
   const ArtworkCard({
     super.key,
@@ -39,7 +39,7 @@ class ArtworkCard extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
+            child: const Text(AppStrings.close),
           ),
         ],
       ),
@@ -53,17 +53,21 @@ class ArtworkCard extends StatelessWidget {
       builder: (context, constraints) {
         final cardWidth = width ?? constraints.maxWidth;
 
-        double titleFontSize;
-        double subtitleFontSize;
-        if (cardWidth > screenWidth / 2) {
-          titleFontSize = AppSizes.fontXL;
-          subtitleFontSize = AppSizes.fontL;
-        } else if (cardWidth >= screenWidth * 0.25) {
+        // Eşik değerleri
+        final smallThreshold = screenWidth * 0.3;
+        final mediumThreshold = screenWidth * 0.5;
+
+        // Font boyutlarını belirle
+        double titleFontSize, subtitleFontSize;
+        if (cardWidth <= smallThreshold) {
+          titleFontSize = AppSizes.fontM;
+          subtitleFontSize = AppSizes.fontS;
+        } else if (cardWidth <= mediumThreshold) {
           titleFontSize = AppSizes.fontL;
           subtitleFontSize = AppSizes.fontM;
         } else {
-          titleFontSize = AppSizes.fontM;
-          subtitleFontSize = AppSizes.fontS;
+          titleFontSize = AppSizes.fontXL;
+          subtitleFontSize = AppSizes.fontL;
         }
 
         return GestureDetector(
@@ -77,6 +81,7 @@ class ArtworkCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Görsel ve Favori Butonu
                 Stack(
                   children: [
                     ClipRRect(
@@ -89,36 +94,29 @@ class ArtworkCard extends StatelessWidget {
                               width: cardWidth,
                               height: _imageHeight,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                debugPrint(
-                                    'Failed to load asset image: $image');
-                                return const Center(
-                                  child: Icon(Icons.broken_image),
-                                );
-                              },
+                              errorBuilder: (_, __, ___) =>
+                                  const Center(child: Icon(Icons.broken_image)),
                             )
                           : Image.network(
                               image,
                               width: cardWidth,
                               height: _imageHeight,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(
-                                  'assets/icons/image_not_found.png',
-                                  width: cardWidth,
-                                  height: _imageHeight,
-                                  fit: BoxFit.fill,
-                                );
-                              },
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return const SizedBox(
-                                  height: _imageHeight,
-                                  child: Center(
-                                      child: CircularProgressIndicator()),
-                                );
-                              },
+                              errorBuilder: (_, __, ___) => Image.asset(
+                                'assets/icons/image_not_found.png',
+                                width: cardWidth,
+                                height: _imageHeight,
+                                fit: BoxFit.cover,
+                              ),
+                              loadingBuilder: (_, child, progress) =>
+                                  progress == null
+                                      ? child
+                                      : const SizedBox(
+                                          height: _imageHeight,
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        ),
                             ),
                     ),
                     if (showFavoriteButton)
@@ -164,43 +162,41 @@ class ArtworkCard extends StatelessWidget {
                       ),
                   ],
                 ),
-                SizedBox(
-                  height: _textBlockHeight,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSizes.spacingS,
-                      vertical: AppSizes.spacingXS,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (subTitle != null && subTitle!.trim().isNotEmpty)
-                          Text(
-                            subTitle!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: subtitleFontSize,
-                              color: AppColors.textSecondary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        GestureDetector(
-                          onTap: () => _showFullDescription(context),
-                          child: Text(
-                            title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: titleFontSize,
-                              color: AppColors.scaffoldDark,
-                              fontWeight: FontWeight.w500,
-                            ),
+
+                // Metin Bloğu
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSizes.spacingS,
+                    vertical: AppSizes.spacingXS,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (subTitle != null && subTitle!.trim().isNotEmpty)
+                        Text(
+                          subTitle!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: subtitleFontSize,
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
+                      GestureDetector(
+                        onTap: () => _showFullDescription(context),
+                        child: Text(
+                          title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: titleFontSize,
+                            color: AppColors.scaffoldDark,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

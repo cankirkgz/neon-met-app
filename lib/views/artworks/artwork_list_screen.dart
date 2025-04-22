@@ -24,8 +24,8 @@ class ArtworkListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final favVm = context.watch<FavoriteViewModel>();
     final size = MediaQuery.of(context).size;
-    final isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final orientation = MediaQuery.of(context).orientation;
+    final isLandscape = orientation == Orientation.landscape;
     final isTablet = size.shortestSide >= 600;
     final isPortraitPhone = !isLandscape && !isTablet;
 
@@ -60,25 +60,45 @@ class ArtworkListScreen extends StatelessWidget {
       centerTitle: true,
     );
 
+    // Responsive column count ve ratio
+    int getCrossAxisCount() {
+      if (isTablet) {
+        return isLandscape ? 4 : 3;
+      }
+      return isLandscape ? 3 : 2;
+    }
+
+    double getAspectRatio() {
+      if (isTablet) {
+        return isLandscape ? 0.85 : 0.9;
+      }
+      return isLandscape ? 0.7 : 0.75;
+    }
+
+    double getMainSpacing() {
+      return isTablet ? AppSizes.spacingL : AppSizes.spacingM;
+    }
+
     return Scaffold(
       appBar: appBar,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(AppSizes.spacingM),
+          padding:
+              EdgeInsets.all(isTablet ? AppSizes.spacingL : AppSizes.spacingM),
           child: isPortraitPhone
               ? ListView.separated(
                   itemCount: objects.length,
                   separatorBuilder: (_, __) =>
-                      const SizedBox(height: AppSizes.spacingM),
+                      SizedBox(height: getMainSpacing()),
                   itemBuilder: (context, index) => buildCard(objects[index]),
                 )
               : GridView.builder(
                   itemCount: objects.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: isTablet ? 3 : 2,
-                    mainAxisSpacing: AppSizes.spacingM,
-                    crossAxisSpacing: AppSizes.spacingM,
-                    childAspectRatio: 0.75,
+                    crossAxisCount: getCrossAxisCount(),
+                    mainAxisSpacing: getMainSpacing(),
+                    crossAxisSpacing: getMainSpacing(),
+                    childAspectRatio: getAspectRatio(),
                   ),
                   itemBuilder: (context, index) => buildCard(objects[index]),
                 ),

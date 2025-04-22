@@ -1,4 +1,3 @@
-// lib/screens/artwork_detail_screen.dart
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:neon_met_app/core/constants/app_colors.dart';
@@ -14,8 +13,7 @@ import 'package:provider/provider.dart';
 class ArtworkDetailScreen extends StatelessWidget {
   final int objectId;
 
-  const ArtworkDetailScreen({Key? key, required this.objectId})
-      : super(key: key);
+  const ArtworkDetailScreen({super.key, required this.objectId});
 
   Future<ObjectModel> _fetchObject() =>
       MetApiService().fetchObjectById(objectId);
@@ -23,7 +21,10 @@ class ArtworkDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final isPortraitPhone = size.shortestSide < 600;
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+    final isTablet = size.shortestSide >= 600;
+    final isPortraitPhone = !isLandscape && !isTablet;
 
     return FutureBuilder<ObjectModel>(
       future: _fetchObject(),
@@ -33,10 +34,13 @@ class ArtworkDetailScreen extends StatelessWidget {
             body: Center(child: CircularProgressIndicator()),
           );
         }
+
         if (snapshot.hasError) {
           return Scaffold(
             appBar: AppBar(),
-            body: Center(child: Text('${AppStrings.error}: ${snapshot.error}')),
+            body: Center(
+              child: Text('${AppStrings.error}: ${snapshot.error}'),
+            ),
           );
         }
 
@@ -141,13 +145,17 @@ class ArtworkDetailScreen extends StatelessWidget {
         ),
         if (obj.objectDate != null) ...[
           const SizedBox(height: AppSizes.spacingS),
-          Text(obj.objectDate!,
-              style: const TextStyle(color: AppColors.textSecondary)),
+          Text(
+            obj.objectDate!,
+            style: const TextStyle(color: AppColors.textSecondary),
+          ),
         ],
         if (obj.creditLine != null) ...[
           const SizedBox(height: AppSizes.spacingM),
-          Text(obj.creditLine!,
-              style: const TextStyle(fontSize: AppSizes.fontM)),
+          Text(
+            obj.creditLine!,
+            style: const TextStyle(fontSize: AppSizes.fontM),
+          ),
         ],
       ],
     );
@@ -167,7 +175,9 @@ class ArtworkDetailScreen extends StatelessWidget {
           const Text(
             'Artwork Details',
             style: TextStyle(
-                fontSize: AppSizes.fontXL, fontWeight: FontWeight.bold),
+              fontSize: AppSizes.fontXL,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: AppSizes.spacingM),
           _detailItem('Title', obj.title),

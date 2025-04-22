@@ -20,7 +20,7 @@ class ObjectService {
   Future<List<int>> fetchObjectIDsByDepartment(int departmentId) async {
     final response = await _dio.get('/search', queryParameters: {
       'departmentId': departmentId,
-      'q': 'a', // herhangi bir şeyle eşleşen
+      'q': 'a',
     });
 
     if (response.statusCode == 200 && response.data['objectIDs'] != null) {
@@ -54,7 +54,7 @@ class ObjectService {
     final response = await _dio.get(
       '/search',
       queryParameters: {
-        'q': '*', // boş arama => tüm objelerde filtre uygula
+        'q': '*',
         'hasImages': true,
         'isOnView': onView,
         if (highlight) 'isHighlight': true,

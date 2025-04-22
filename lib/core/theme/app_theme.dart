@@ -1,4 +1,3 @@
-// lib/core/theme/app_theme.dart
 import 'package:flutter/material.dart';
 import 'package:neon_met_app/core/constants/app_colors.dart';
 

@@ -11,7 +11,6 @@ class MetApiService {
     ),
   );
 
-  /// Departman listesini API'den getir
   Future<List<DepartmentModel>> fetchDepartments() async {
     try {
       final response = await _dio.get('departments');
@@ -26,12 +25,11 @@ class MetApiService {
     }
   }
 
-  /// Belirli bir departmana ait obje ID'lerini getir
   Future<List<int>> fetchObjectIDsByDepartment(int departmentId) async {
     try {
       final response = await _dio.get('search', queryParameters: {
         'departmentId': departmentId,
-        'q': 'a', // herhangi bir harf — tüm içerikler
+        'q': 'a',
         'hasImages': true,
       });
 
@@ -45,7 +43,6 @@ class MetApiService {
     }
   }
 
-  /// Obje detaylarını ID'ye göre getir
   Future<ObjectModel> fetchObjectById(int objectId) async {
     try {
       final response = await _dio.get('objects/$objectId');
