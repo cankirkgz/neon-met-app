@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:neon_met_app/core/constants/app_colors.dart';
+import 'package:neon_met_app/core/constants/app_sizes.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+
   const PrimaryButton({
     super.key,
     required this.text,
@@ -18,17 +20,20 @@ class PrimaryButton extends StatelessWidget {
         backgroundColor: WidgetStateProperty.all(AppColors.error),
         shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(AppSizes.radiusM),
           ),
         ),
         minimumSize: WidgetStateProperty.all(
-          const Size(200, 50),
+          const Size(AppSizes.buttonWidth, AppSizes.buttonHeight),
         ),
       ),
       child: Text(
         text,
         style: TextStyle(
-            color: Theme.of(context).scaffoldBackgroundColor, fontSize: 18.0),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          fontSize: AppSizes.fontXL,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

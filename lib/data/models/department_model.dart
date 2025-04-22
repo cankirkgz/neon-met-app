@@ -12,7 +12,7 @@ class DepartmentModel {
   factory DepartmentModel.fromJson(Map<String, dynamic> json) =>
       _$DepartmentModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DepartmentModelToJson(this); // DÜZELTİLDİ
+  Map<String, dynamic> toJson() => _$DepartmentModelToJson(this);
 }
 
 @JsonSerializable()

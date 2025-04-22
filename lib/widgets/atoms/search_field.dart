@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neon_met_app/core/constants/app_colors.dart';
+import 'package:neon_met_app/core/constants/app_sizes.dart';
+import 'package:neon_met_app/core/constants/app_string.dart';
 
 class SearchField extends StatefulWidget {
   final ValueChanged<String>? onSubmitted;
@@ -11,7 +13,7 @@ class SearchField extends StatefulWidget {
     super.key,
     this.onSubmitted,
     this.onChanged,
-    this.hintText = 'Search...',
+    this.hintText = AppStrings.searchHint,
     this.controller,
   });
 
@@ -49,15 +51,14 @@ class _SearchFieldState extends State<SearchField> {
 
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.scaffoldLight,
-            borderRadius: BorderRadius.circular(6),
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(AppSizes.radiusM),
             border: Border.all(color: borderColor, width: 2),
           ),
           child: IntrinsicHeight(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Arama alanı
                 Expanded(
                   child: TextFormField(
                     focusNode: _focusNode,
@@ -65,31 +66,31 @@ class _SearchFieldState extends State<SearchField> {
                     decoration: InputDecoration(
                       hintText: widget.hintText,
                       hintStyle: TextStyle(
-                          color: AppColors.textSecondary[600], fontSize: 18),
+                        color: AppColors.textSecondary[600],
+                        fontSize: AppSizes.fontL,
+                      ),
                       contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 12,
+                        horizontal: AppSizes.spacingL,
+                        vertical: AppSizes.spacingM,
                       ),
                       border: InputBorder.none,
                     ),
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: AppSizes.fontL),
                     onChanged: widget.onChanged,
                     onFieldSubmitted: widget.onSubmitted,
                   ),
                 ),
-                // Dikey çizgi
                 Container(
-                  width: 2,
+                  width: AppSizes.spacingXS,
                   color: isFocused
                       ? AppColors.scaffoldDark
                       : AppColors.textSecondary[300],
                 ),
-                // Arama ikonu
                 Image.asset(
                   isFocused
                       ? 'assets/icons/btn_search_selected@3x.png'
                       : 'assets/icons/btn_search_unselected@3x.png',
-                  width: 60,
+                  width: AppSizes.iconSplashSize * 0.75,
                 ),
               ],
             ),

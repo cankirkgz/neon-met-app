@@ -17,7 +17,7 @@ class ObjectModel {
   final String? creditLine;
   final String? period;
   final String? objectNumber;
-  final String? classification; // ✅ Eklendi
+  final String? classification;
 
   ObjectModel({
     required this.objectID,
@@ -33,7 +33,7 @@ class ObjectModel {
     this.creditLine,
     this.period,
     this.objectNumber,
-    this.classification, // ✅ Constructor'a eklendi
+    this.classification,
   });
 
   factory ObjectModel.fromJson(Map<String, dynamic> json) =>

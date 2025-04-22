@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neon_met_app/core/constants/app_colors.dart';
+import 'package:neon_met_app/core/constants/app_sizes.dart';
 import 'package:neon_met_app/widgets/molecules/bottom_nav_item.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
@@ -14,43 +15,41 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
-      // SADECE alttan boşluk – solda‑sağda yok!
-      padding: const EdgeInsets.only(bottom: 25),
+      padding: const EdgeInsets.only(bottom: AppSizes.spacingXL),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(15),
-          topRight: Radius.circular(15),
-          bottomLeft: Radius.circular(25),
-          bottomRight: Radius.circular(25),
+          topLeft: Radius.circular(AppSizes.radiusM),
+          topRight: Radius.circular(AppSizes.radiusM),
+          bottomLeft: Radius.circular(AppSizes.radiusXL),
+          bottomRight: Radius.circular(AppSizes.radiusXL),
         ),
         child: Container(
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
-                color: AppColors.scaffoldDark.withOpacity(.2),
-                blurRadius: 15,
-                offset: const Offset(0, 2),
+                color: AppColors.scaffoldDark.withOpacity(0.2),
+                blurRadius: AppSizes.shadowBlurLarge,
+                offset: const Offset(0, AppSizes.shadowOffsetY),
               ),
               BoxShadow(
-                color: AppColors.scaffoldDark.withOpacity(.15),
-                blurRadius: 6,
+                color: AppColors.scaffoldDark.withOpacity(0.15),
+                blurRadius: AppSizes.shadowBlurSmall,
               ),
             ],
           ),
           child: BottomAppBar(
             shape: const CircularNotchedRectangle(),
-            notchMargin: 8,
-            elevation: 0,
-            color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.grey[900]
-                : AppColors.scaffoldLight,
+            notchMargin: AppSizes.bottomNavNotchMargin,
+            elevation: AppSizes.bottomNavElevation,
+            color: isDark ? Colors.grey[900] : AppColors.scaffoldLight,
             child: SizedBox(
-              height: 60,
+              height: AppSizes.bottomNavHeight,
               child: Row(
                 children: [
-                  const SizedBox(width: 50), // sol iç boşluk
-                  // ---- Sol item ----
+                  const SizedBox(width: AppSizes.outerNavPadding),
                   GestureDetector(
                     onTap: () => onItemSelected(0),
                     child: BottomNavItem(
@@ -60,10 +59,9 @@ class CustomBottomNavBar extends StatelessWidget {
                       isSelected: selectedIndex == 0,
                     ),
                   ),
-                  const Spacer(), // ekranın sol yarısı
-                  const SizedBox(width: 72), // FAB + notch için boşluk
-                  const Spacer(), // ekranın sağ yarısı
-                  // ---- Sağ item ----
+                  const Spacer(),
+                  const SizedBox(width: AppSizes.fabNotchGap),
+                  const Spacer(),
                   GestureDetector(
                     onTap: () => onItemSelected(2),
                     child: BottomNavItem(
@@ -73,7 +71,7 @@ class CustomBottomNavBar extends StatelessWidget {
                       isSelected: selectedIndex == 2,
                     ),
                   ),
-                  const SizedBox(width: 50), // sağ iç boşluk
+                  const SizedBox(width: AppSizes.outerNavPadding),
                 ],
               ),
             ),

@@ -1,5 +1,3 @@
-// lib/viewmodel/favorite_viewmodel.dart
-
 import 'package:flutter/foundation.dart';
 import 'package:neon_met_app/data/models/favorite_artwork.dart';
 import 'package:neon_met_app/data/models/object_model.dart';
@@ -31,7 +29,6 @@ class FavoriteViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 🔁 HIVE'daki favorileri ObjectModel listesine çevir
   List<ObjectModel> getFavoritesAsObjectModels() {
     return _favorites.map((f) {
       return ObjectModel(

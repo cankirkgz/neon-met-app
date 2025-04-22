@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:neon_met_app/core/constants/app_colors.dart';
+import 'package:neon_met_app/core/constants/app_sizes.dart';
+import 'package:neon_met_app/core/constants/app_string.dart';
 import 'package:neon_met_app/data/models/favorite_artwork.dart';
 import 'package:neon_met_app/viewmodel/favorite_viewmodel.dart';
 import 'package:neon_met_app/viewmodel/object_viewmodel.dart';
@@ -13,14 +15,13 @@ import 'package:neon_met_app/routes/app_router.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<ObjectViewModel>();
     final favVm = context.watch<FavoriteViewModel>();
 
-    // İLK YÜKLEME
     if (!vm.isLoading &&
         vm.currentExhibitions.isEmpty &&
         vm.famousArtworks.isEmpty &&
@@ -31,14 +32,12 @@ class HomeScreen extends StatelessWidget {
       });
     }
 
-    // EKRAN BOYUTLARI VE ORYANTASYON
     final size = MediaQuery.of(context).size;
     final orientation = MediaQuery.of(context).orientation;
     final isLandscape = orientation == Orientation.landscape;
     final isTablet = size.shortestSide >= 600;
     final isPortraitPhone = !isLandscape && !isTablet;
 
-    // Kart listesini oluşturacak fonksiyon
     List<ArtworkCard> buildCards(List artworks) => artworks.map((obj) {
           final isFav = favVm.isFavorite(obj.objectID);
           return ArtworkCard(
@@ -69,14 +68,12 @@ class HomeScreen extends StatelessWidget {
     final currentCards = buildCards(vm.currentExhibitions);
     final famousCards = buildCards(vm.famousArtworks);
 
-    // Responsive ölçümler (yatay/tablet modunda kullanılacak)
-    final horizontalPadding = size.width * 0.05;
-    final verticalSpacing = size.height * 0.02;
+    const horizontalPadding = AppSizes.spacingXL;
+    const verticalSpacing = AppSizes.spacingL;
     final logoSize = isLandscape ? size.height * 0.2 : size.width * 0.25;
     final bannerHeight = isLandscape ? size.height * 0.3 : size.height * 0.2;
     final cardWidth = isLandscape ? size.width * 0.25 : size.width * 0.6;
 
-    // Ortak RefreshIndicator
     return RefreshIndicator(
       onRefresh: () async {
         await Future.wait([
@@ -85,7 +82,6 @@ class HomeScreen extends StatelessWidget {
         ]);
       },
       child: isPortraitPhone
-          // PORTRAIT PHONE: orijinal düzen
           ? SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,15 +90,16 @@ class HomeScreen extends StatelessWidget {
                   Center(
                     child: Image.asset(
                       'assets/images/the_met_logo.png',
-                      width: 100,
-                      height: 100,
+                      width: AppSizes.iconSplashSize,
+                      height: AppSizes.iconSplashSize,
+                      semanticLabel: AppStrings.theMetLogoAlt,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSizes.spacingL),
                   const WelcomeBanner(),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: AppSizes.spacingXL),
                   _LoadingOrContentSection(
-                    title: 'Current Exhibitions',
+                    title: AppStrings.homeTitleCurrentExhibitions,
                     isLoading: vm.isLoading,
                     hasError: vm.errorMessage != null,
                     errorMessage: vm.errorMessage,
@@ -110,15 +107,15 @@ class HomeScreen extends StatelessWidget {
                     onSeeAllPressed: () {
                       context.router.push(
                         ArtworkListRoute(
-                          title: 'Current Exhibitions',
+                          title: AppStrings.homeTitleCurrentExhibitions,
                           objects: vm.currentExhibitions,
                         ),
                       );
                     },
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSizes.spacingL),
                   _LoadingOrContentSection(
-                    title: 'Famous Artworks',
+                    title: AppStrings.homeTitleFamousArtworks,
                     isLoading: vm.isLoading,
                     hasError: vm.errorMessage != null,
                     errorMessage: vm.errorMessage,
@@ -126,7 +123,7 @@ class HomeScreen extends StatelessWidget {
                     onSeeAllPressed: () {
                       context.router.push(
                         ArtworkListRoute(
-                          title: 'Famous Artworks',
+                          title: AppStrings.homeTitleFamousArtworks,
                           objects: vm.famousArtworks,
                         ),
                       );
@@ -136,32 +133,32 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             )
-          // LANDSCAPE / TABLET: responsive düzen
           : SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: horizontalPadding,
                 vertical: verticalSpacing,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: verticalSpacing),
+                  const SizedBox(height: verticalSpacing),
                   Center(
                     child: Image.asset(
                       'assets/images/the_met_logo.png',
                       width: logoSize,
                       height: logoSize,
+                      semanticLabel: AppStrings.theMetLogoAlt,
                     ),
                   ),
-                  SizedBox(height: verticalSpacing),
+                  const SizedBox(height: verticalSpacing),
                   SizedBox(
                     width: double.infinity,
                     height: bannerHeight,
-                    child: WelcomeBanner(),
+                    child: const WelcomeBanner(),
                   ),
-                  SizedBox(height: verticalSpacing * 2),
+                  const SizedBox(height: verticalSpacing * 2),
                   _ResponsiveSection(
-                    title: 'Current Exhibitions',
+                    title: AppStrings.homeTitleCurrentExhibitions,
                     isLoading: vm.isLoading,
                     hasError: vm.errorMessage != null,
                     errorMessage: vm.errorMessage,
@@ -170,15 +167,15 @@ class HomeScreen extends StatelessWidget {
                     onSeeAllPressed: () {
                       context.router.push(
                         ArtworkListRoute(
-                          title: 'Current Exhibitions',
+                          title: AppStrings.homeTitleCurrentExhibitions,
                           objects: vm.currentExhibitions,
                         ),
                       );
                     },
                   ),
-                  SizedBox(height: verticalSpacing * 2),
+                  const SizedBox(height: verticalSpacing * 2),
                   _ResponsiveSection(
-                    title: 'Famous Artworks',
+                    title: AppStrings.homeTitleFamousArtworks,
                     isLoading: vm.isLoading,
                     hasError: vm.errorMessage != null,
                     errorMessage: vm.errorMessage,
@@ -187,13 +184,13 @@ class HomeScreen extends StatelessWidget {
                     onSeeAllPressed: () {
                       context.router.push(
                         ArtworkListRoute(
-                          title: 'Famous Artworks',
+                          title: AppStrings.homeTitleFamousArtworks,
                           objects: vm.famousArtworks,
                         ),
                       );
                     },
                   ),
-                  SizedBox(height: verticalSpacing * 2),
+                  const SizedBox(height: verticalSpacing * 2),
                 ],
               ),
             ),
@@ -221,25 +218,25 @@ class _LoadingOrContentSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: AppSizes.spacingL),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SectionTitle(title: title, onPressed: onSeeAllPressed),
-          const SizedBox(height: 10),
+          const SizedBox(height: AppSizes.spacingS),
           if (hasError)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32),
+              padding: const EdgeInsets.symmetric(vertical: AppSizes.spacingXL),
               child: Center(
                 child: Text(
-                  errorMessage ?? 'Failed to load $title',
+                  errorMessage ?? '${AppStrings.homeErrorLoading} $title',
                   style: const TextStyle(color: AppColors.error),
                 ),
               ),
             )
           else if (isLoading && items.isEmpty)
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 32),
+              padding: EdgeInsets.symmetric(vertical: AppSizes.spacingXL),
               child: Center(child: CircularProgressIndicator()),
             )
           else
@@ -275,8 +272,8 @@ class _ResponsiveSection extends StatelessWidget {
         MediaQuery.of(context).orientation == Orientation.landscape;
     final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
     final useWrap = isLandscape || isTablet;
-    final horizontalPadding = MediaQuery.of(context).size.width * 0.05;
-    final verticalSpacing = MediaQuery.of(context).size.height * 0.02;
+    final horizontalPadding = AppSizes.spacingXL;
+    final verticalSpacing = AppSizes.spacingL;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -290,7 +287,7 @@ class _ResponsiveSection extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: verticalSpacing * 2),
               child: Center(
                 child: Text(
-                  errorMessage ?? 'Failed to load $title',
+                  errorMessage ?? '${AppStrings.homeErrorLoading} $title',
                   style: const TextStyle(color: AppColors.error),
                 ),
               ),

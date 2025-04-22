@@ -33,7 +33,6 @@ class ObjectViewModel extends ChangeNotifier {
     }
   }
 
-  /// Şu anda sergilenen öne‑çıkan eserler
   Future<void> fetchCurrentExhibitions() async {
     await _fetchAndStore(
       idFetcher: () =>
@@ -42,7 +41,6 @@ class ObjectViewModel extends ChangeNotifier {
     );
   }
 
-  /// Popüler / klasik tablolar
   Future<void> fetchFamousArtworks() async {
     await _fetchAndStore(
       idFetcher: () => _service.searchObjects(query: 'painting'),

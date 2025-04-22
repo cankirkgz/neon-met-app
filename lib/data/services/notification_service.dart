@@ -15,7 +15,6 @@ class NotificationService {
   Future<void> initNotification() async {
     if (_isInitialized) return;
 
-    // iOS için bildirim izni iste
     final iosPlugin = notificationsPlugin.resolvePlatformSpecificImplementation<
         IOSFlutterLocalNotificationsPlugin>();
 
@@ -25,7 +24,6 @@ class NotificationService {
       sound: true,
     );
 
-    // Zaman dilimi ayarları
     tz_data.initializeTimeZones();
     final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(currentTimeZone));
@@ -168,7 +166,7 @@ class NotificationService {
       scheduledDate,
       notificationDetails(),
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.time, // her gün aynı saatte
+      matchDateTimeComponents: DateTimeComponents.time,
     );
   }
 }

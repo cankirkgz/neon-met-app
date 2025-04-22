@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neon_met_app/core/constants/app_colors.dart';
+import 'package:neon_met_app/core/constants/app_sizes.dart';
+import 'package:neon_met_app/core/constants/app_string.dart';
 
 class ArtworkCard extends StatelessWidget {
   final String image;
@@ -23,9 +25,9 @@ class ArtworkCard extends StatelessWidget {
     this.width,
     this.isAsset = false,
     this.onPressed,
-    this.showFavoriteButton = false, // Varsayılan olarak false
-    this.isFavorite = false, // Varsayılan olarak false
-    this.onFavoritePressed, // Butona tıklandığında çağrılacak fonksiyon
+    this.showFavoriteButton = false,
+    this.isFavorite = false,
+    this.onFavoritePressed,
   });
 
   void _showFullDescription(BuildContext context) {
@@ -37,7 +39,7 @@ class ArtworkCard extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Kapat'),
+            child: const Text('Close'),
           ),
         ],
       ),
@@ -54,14 +56,14 @@ class ArtworkCard extends StatelessWidget {
         double titleFontSize;
         double subtitleFontSize;
         if (cardWidth > screenWidth / 2) {
-          titleFontSize = 18;
-          subtitleFontSize = 14;
+          titleFontSize = AppSizes.fontXL;
+          subtitleFontSize = AppSizes.fontL;
         } else if (cardWidth >= screenWidth * 0.25) {
-          titleFontSize = 16;
-          subtitleFontSize = 12;
+          titleFontSize = AppSizes.fontL;
+          subtitleFontSize = AppSizes.fontM;
         } else {
-          titleFontSize = 14;
-          subtitleFontSize = 10;
+          titleFontSize = AppSizes.fontM;
+          subtitleFontSize = AppSizes.fontS;
         }
 
         return GestureDetector(
@@ -70,7 +72,7 @@ class ArtworkCard extends StatelessWidget {
             width: cardWidth,
             decoration: BoxDecoration(
               color: AppColors.textSecondary[100],
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppSizes.radiusS),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,8 +80,9 @@ class ArtworkCard extends StatelessWidget {
                 Stack(
                   children: [
                     ClipRRect(
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(8)),
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(AppSizes.radiusS),
+                      ),
                       child: isAsset
                           ? Image.asset(
                               image,
@@ -90,7 +93,8 @@ class ArtworkCard extends StatelessWidget {
                                 debugPrint(
                                     'Failed to load asset image: $image');
                                 return const Center(
-                                    child: Icon(Icons.broken_image));
+                                  child: Icon(Icons.broken_image),
+                                );
                               },
                             )
                           : Image.network(
@@ -119,16 +123,19 @@ class ArtworkCard extends StatelessWidget {
                     ),
                     if (showFavoriteButton)
                       Positioned(
-                        top: 8,
-                        right: 8,
+                        top: AppSizes.spacingS,
+                        right: AppSizes.spacingS,
                         child: GestureDetector(
                           onTap: onFavoritePressed,
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
+                              horizontal: AppSizes.spacingS,
+                              vertical: AppSizes.spacingXS,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.black54,
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius:
+                                  BorderRadius.circular(AppSizes.radiusL),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -138,16 +145,16 @@ class ArtworkCard extends StatelessWidget {
                                       ? Icons.favorite
                                       : Icons.favorite_border,
                                   color: AppColors.scaffoldLight,
-                                  size: 16,
+                                  size: AppSizes.fontM,
                                 ),
-                                const SizedBox(width: 4),
+                                const SizedBox(width: AppSizes.spacingXS),
                                 Text(
                                   isFavorite
-                                      ? 'Added to favorites'
-                                      : 'Add to favorites',
+                                      ? AppStrings.addedToFavorites
+                                      : AppStrings.addToFavorites,
                                   style: const TextStyle(
                                     color: AppColors.scaffoldLight,
-                                    fontSize: 12,
+                                    fontSize: AppSizes.fontS,
                                   ),
                                 ),
                               ],
@@ -157,13 +164,12 @@ class ArtworkCard extends StatelessWidget {
                       ),
                   ],
                 ),
-                // Fixed-size text block below image
                 SizedBox(
                   height: _textBlockHeight,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
+                      horizontal: AppSizes.spacingS,
+                      vertical: AppSizes.spacingXS,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

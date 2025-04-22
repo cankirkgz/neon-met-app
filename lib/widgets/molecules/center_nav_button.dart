@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neon_met_app/core/constants/app_colors.dart';
+import 'package:neon_met_app/core/constants/app_sizes.dart';
 
 class CenterNavButton extends StatelessWidget {
   final bool isSelected;
@@ -13,21 +14,21 @@ class CenterNavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 80,
-        height: 80,
+        width: AppSizes.centerButtonSize,
+        height: AppSizes.centerButtonSize,
         decoration: BoxDecoration(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? Colors.grey[900]
-              : AppColors.scaffoldLight,
+          color: isDark ? Colors.grey[900] : AppColors.scaffoldLight,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: AppColors.scaffoldDark.withOpacity(.15),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
+              color: AppColors.scaffoldDark.withOpacity(0.15),
+              blurRadius: AppSizes.shadowBlurM,
+              offset: const Offset(0, AppSizes.shadowOffsetY),
             ),
           ],
         ),

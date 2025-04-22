@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:neon_met_app/core/constants/app_sizes.dart';
+import 'package:neon_met_app/core/constants/app_string.dart';
 
-/// Uygulama açılışında görünen animasyon + açıklama metni
 class SplashAnimation extends StatelessWidget {
   const SplashAnimation({
     super.key,
     this.lottiePath = 'assets/lotties/loading.json',
-    this.caption =
-        "The MET's collection includes world‑famous names from Van Gogh to Tutankhamun!",
+    this.caption = AppStrings.splashCaption,
   });
 
-  /// Lottie dosyasının yolu
   final String lottiePath;
-
-  /// Alt tarafta gösterilecek metin
   final String caption;
 
   @override
@@ -23,19 +20,15 @@ class SplashAnimation extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // ---------- Animasyon ----------
         Lottie.asset(
           lottiePath,
-          width: 80,
-          height: 80,
+          width: AppSizes.iconSplashSize,
+          height: AppSizes.iconSplashSize,
           fit: BoxFit.contain,
         ),
-
-        const SizedBox(height: 24),
-
-        // ---------- Açıklama ----------
+        const SizedBox(height: AppSizes.spacingL),
         ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 280),
+          constraints: const BoxConstraints(maxWidth: AppSizes.maxTextWidth),
           child: Text(
             caption,
             textAlign: TextAlign.center,

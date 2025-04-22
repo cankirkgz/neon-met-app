@@ -12,12 +12,14 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.microtask(() async {
-      await Future.delayed(AppDurations.splashDelay);
-      if (context.mounted) {
-        context.router.replace(const MainRoute());
-      }
-    });
+    Future.microtask(
+      () async {
+        await Future.delayed(AppDurations.splashDelay);
+        if (context.mounted) {
+          context.router.replace(const MainRoute());
+        }
+      },
+    );
 
     return const Scaffold(
       backgroundColor: AppColors.scaffoldLight,

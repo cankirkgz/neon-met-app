@@ -1,4 +1,3 @@
-// lib/routes/app_router.dart
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:neon_met_app/data/models/object_model.dart';
@@ -18,9 +17,8 @@ class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
         AutoRoute(page: SplashRoute.page, initial: true),
-        // ==== yeni kabuk ====
         AutoRoute(
-          page: MainRoute.page, // MainScreen
+          page: MainRoute.page,
           path: '/',
           children: [
             AutoRoute(page: HomeRoute.page, path: 'home', initial: true),

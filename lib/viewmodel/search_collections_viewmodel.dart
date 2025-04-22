@@ -1,48 +1,46 @@
-// lib/viewmodel/search_collections_viewmodel.dart
-
 import 'package:flutter/foundation.dart';
 import 'package:neon_met_app/data/models/object_model.dart';
 import 'package:neon_met_app/data/services/met_api_service.dart';
 
 class SearchCollectionsViewModel extends ChangeNotifier {
-  final _api = MetApiService();
+  final MetApiService _api = MetApiService();
 
-  List<ObjectModel> allObjects = [];
-  List<ObjectModel> filteredObjects = [];
-  bool isLoading = false;
-  String? error;
+  final List<ObjectModel> _allObjects = [];
+  List<ObjectModel> _filteredObjects = [];
+  List<ObjectModel> get filteredObjects => _filteredObjects;
 
-  int? _loadedDepartmentId; // ← ekledik
-  int? get loadedDepartmentId => _loadedDepartmentId; // dışarı açtık
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  String? _error;
+  String? get error => _error;
+
+  int? _loadedDepartmentId;
+  int? get loadedDepartmentId => _loadedDepartmentId;
 
   Future<void> fetchObjects(int departmentId) async {
-    // eğer aynı departman Id zaten yüklüyse tekrar yükleme
     if (_loadedDepartmentId == departmentId) return;
 
-    _loadedDepartmentId = departmentId; // hangi departmanı çektiğimizi sakla
-    isLoading = true;
-    error = null;
+    _loadedDepartmentId = departmentId;
+    _isLoading = true;
+    _error = null;
     notifyListeners();
 
     try {
       final ids = await _api.fetchObjectIDsByDepartment(departmentId);
-      final objects = await Future.wait(ids
-          .take(50) // isterseniz sınır koyabilirsiniz
-          .map((id) => _api.fetchObjectById(id)));
-      allObjects = objects;
-      filteredObjects = allObjects;
+      final objects = await Future.wait(
+        ids.take(50).map(_api.fetchObjectById),
+      );
+      _allObjects
+        ..clear()
+        ..addAll(objects);
+
+      _filteredObjects = List.from(_allObjects);
     } catch (e) {
-      error = e.toString();
+      _error = e.toString();
     }
 
-    isLoading = false;
-    notifyListeners();
-  }
-
-  void filterObjects(String query) {
-    filteredObjects = allObjects
-        .where((o) => o.title.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+    _isLoading = false;
     notifyListeners();
   }
 }

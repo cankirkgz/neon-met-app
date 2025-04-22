@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:neon_met_app/core/constants/app_colors.dart';
+import 'package:neon_met_app/core/constants/app_sizes.dart';
+import 'package:neon_met_app/core/constants/app_string.dart';
 
 class SectionTitle extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
+
   const SectionTitle({
     super.key,
     required this.title,
@@ -17,22 +20,27 @@ class SectionTitle extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontSize: AppSizes.fontXXL,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         InkWell(
           onTap: onPressed,
           child: Row(
             children: [
               const Text(
-                "See all",
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
+                AppStrings.seeAll,
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: AppSizes.fontL,
+                ),
               ),
-              Image.asset(
-                'assets/icons/img_forward.png',
-              ),
+              const SizedBox(width: AppSizes.spacingXS),
+              Image.asset('assets/icons/img_forward.png'),
             ],
           ),
-        )
+        ),
       ],
     );
   }

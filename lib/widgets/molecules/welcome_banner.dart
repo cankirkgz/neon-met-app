@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:neon_met_app/core/constants/app_string.dart';
+import 'package:provider/provider.dart';
 import 'package:neon_met_app/core/constants/app_colors.dart';
+import 'package:neon_met_app/core/constants/app_sizes.dart';
 import 'package:neon_met_app/routes/app_router.dart';
 import 'package:neon_met_app/viewmodel/favorite_viewmodel.dart';
 import 'package:neon_met_app/widgets/atoms/primary_button.dart';
-import 'package:provider/provider.dart';
 
 class WelcomeBanner extends StatelessWidget {
   const WelcomeBanner({super.key});
@@ -21,31 +23,31 @@ class WelcomeBanner extends StatelessWidget {
           fit: BoxFit.cover,
         ),
         Positioned(
-          left: 20,
-          bottom: 30,
+          left: AppSizes.spacingM,
+          bottom: AppSizes.spacingL + AppSizes.spacingS,
           child: SizedBox(
             width: screenWidth * 0.6,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(AppSizes.spacingM),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    "Welcome to The Met",
+                    AppStrings.welcome,
                     style: TextStyle(
-                      fontSize: 35,
+                      fontSize: AppSizes.fontXXL + 11,
                       color: AppColors.textDark,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSizes.spacingM),
                   PrimaryButton(
-                    text: "Explore Collection",
+                    text: AppStrings.exploreCollection,
                     onPressed: () =>
                         AutoTabsRouter.of(context).setActiveIndex(1),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSizes.spacingS + 4),
                   GestureDetector(
                     onTap: () {
                       final favVm = context.read<FavoriteViewModel>();
@@ -54,16 +56,16 @@ class WelcomeBanner extends StatelessWidget {
 
                       context.router.push(
                         ArtworkListRoute(
-                          title: "Your Favorites",
+                          title: AppStrings.goToFavorites,
                           objects: favoriteObjects,
                         ),
                       );
                     },
-                    child: Text(
-                      "Go to Favorites",
+                    child: const Text(
+                      AppStrings.goToFavorites,
                       style: TextStyle(
                         color: AppColors.textDark,
-                        fontSize: 16,
+                        fontSize: AppSizes.fontL,
                         decoration: TextDecoration.underline,
                       ),
                     ),
